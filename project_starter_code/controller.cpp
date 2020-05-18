@@ -164,12 +164,24 @@ int main() {
 			//Vector3d des_pos_in_world = Vector3d(-0.3, 0.8, 0.6); // To the cup
 			posori_task->_desired_position = des_pos_in_world ;
 			//
+			VectorXd q_desired = VectorXd::Zero(10);
+			q_desired << 0.0, -0.5, 0.0, -30.0*M_PI/180.0, -15.0*M_PI/180.0, -15.0*M_PI/180.0, -105.0*M_PI/180.0, 0.0*M_PI/180.0, 90.0*M_PI/180.0, 45.0*M_PI/180.0;
+
+			MatrixXd Jv = MatrixXd::Zero(3,dof);
+			MatrixXd Lambda = MatrixXd::Zero(3,3);
+			MatrixXd J_bar = MatrixXd::Zero(dof,3);
+			MatrixXd N = MatrixXd::Zero(dof,dof);
+
+			robot->Jv(Jv, control_link, control_point);
+			robot->taskInertiaMatrix(Lambda, Jv);
+			robot->dynConsistentInverseJacobian(J_bar, Jv);
+			robot->nullspaceMatrix(N, Jv);
 
 			// compute torques
 			posori_task->computeTorques(posori_task_torques);
 			joint_task->computeTorques(joint_task_torques);
 
-			command_torques = posori_task_torques + joint_task_torques;
+			command_torques = posori_task_torques + joint_task_torques + N.transpose()*(-50*(robot->_q - q_desired) - 10* robot->_dq);
 
 			Vector3d ee_pos ;
 			robot->position(ee_pos, control_link, control_point);
