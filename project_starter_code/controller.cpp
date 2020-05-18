@@ -103,7 +103,7 @@ int main() {
 	joint_task->_kv = 15.0;
 
 	VectorXd q_init_desired = initial_q;
-	q_init_desired << 0, 0, 0, -30.0, -15.0, -15.0, -105.0, 0.0, 90.0, 45.0;
+	q_init_desired << 0.0, 0.0, 0.0, -30.0, -15.0, -15.0, -105.0, 0.0, 90.0, 45.0;
 	q_init_desired *= M_PI/180.0;
 	joint_task->_desired_position = q_init_desired;
 
@@ -141,7 +141,7 @@ int main() {
 			if( (robot->_q - q_init_desired).norm() < 0.15 )
 			{
 				posori_task->reInitializeTask();
-				posori_task->_desired_position += Vector3d(-0.0,0.5,0.6);
+				posori_task->_desired_position += Vector3d(-0.1,0.1,0.1);
 				posori_task->_desired_orientation = AngleAxisd(M_PI/6, Vector3d::UnitX()).toRotationMatrix() * posori_task->_desired_orientation;
 
 				joint_task->reInitializeTask();
@@ -160,8 +160,8 @@ int main() {
 			joint_task->updateTaskModel(N_prec);
 
 			//Set Desired Position
-			//Vector3d des_pos_in_world = Vector3d(0.0, -0.5, 0.6); // To the Box
-			Vector3d des_pos_in_world = Vector3d(0.0, 0.5, 0.3); // To the cup
+			Vector3d des_pos_in_world = Vector3d(0.0, -1, 0.6); // To the Box
+			//Vector3d des_pos_in_world = Vector3d(-0.3, 0.8, 0.6); // To the cup
 			posori_task->_desired_position = des_pos_in_world ;
 			//
 

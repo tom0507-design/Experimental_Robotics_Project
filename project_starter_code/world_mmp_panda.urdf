@@ -10,7 +10,7 @@
 
 
 	<static_object name="Table">
-		<origin xyz="0.0 -0.85 0" rpy="0 0 0" />
+		<origin xyz="0.0 -1.25 0" rpy="0 0 0" />
 		<collision>
 	        <origin xyz="0.0 0.0 0.2715" rpy="0 0 0" />
 	        <geometry>
@@ -28,27 +28,28 @@
 	</static_object>
 
 
-	<static_object name="Table_Blender">
-		<origin xyz="0.0 0.8 0" rpy="0 0 0" />
+	<static_object name="Table_2">
+		<origin xyz="0.0 1.2 -0.2" rpy="0 0 0" />
 		<collision>
-	        <origin xyz="-0.0 0.0 0.1" rpy="0 0 0" />
+	        <origin xyz="0.0 0.0 0.2715" rpy="0 0 0" />
 	        <geometry>
-	            <box size="0.6 1.2 0.543" />
+	            <box size="1.515 1.0 0.543" />
 	        </geometry>
 	    </collision>
 	    <visual>
-	    	<origin xyz="-0.4 0.0 0.1" rpy="1.570796326 0 1.570796326" />
+	    	<origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
 	        <!-- <origin xyz="0.0 0.0 0.2715" rpy="0 0 0" /> -->
 	        <geometry>
-	            <mesh filename="./resources/../../../model/test_objects/meshes/visual/Table_Blender.obj" scale="1.0 1.0 1.0"/>
-	             <!-- <box size="1.515 1.0 0.5" /> -->
+	            <mesh filename="./resources/../../../model/test_objects/meshes/visual/table.obj" scale="1.0 1.0 1.0"/>
+	             <!-- <box size="1.515 1.0 0.543" /> -->
 	        </geometry>
 	    </visual>
 	</static_object>
 
 
 
-<!--<static_object name="Yellow_Box">
+
+<!-- <static_object name="Yellow_Box">
 		<origin xyz="0.0 -0.6 0.7" rpy="0 0 0" />
 		<inertial>
 	        <origin xyz="0 0 0" rpy="0 0 0" />
@@ -71,15 +72,14 @@
 
 	<robot name="Yellow_Box">
 		<model dir="./resources" path="Yellow_Box.urdf" name="Yellow_Box" />
-		<origin xyz="0 -0.6 0.7" rpy="0 0 0" />
-	</robot>
+		<origin xyz="0 -1.0 1.2" rpy="0 0 0" />
+	</robot>  
 
 
-	<robot name="cup">
+<!--	<robot name="cup">
 		<model dir="./resources" path="cup.urdf" name="cup" />
-		<!-- <origin xyz="0 0.5 0.3" rpy="0 0 0" />  -->
-		<origin xyz="0 0.5 0.3" rpy="0 0 0" />
-	</robot>
+		<origin xyz="-0.3 0.8 0.8" rpy="0 0 0" />
+	</robot>  -->
 
 
 
@@ -94,7 +94,7 @@
 	</light>
 
 	<camera name="camera_fixed">
-		<position xyz="2.0 -0.8 1.0" />
+		<position xyz="3 -0.8 1.5" />
 		<vertical xyz="0.0 0.0 1.0" />
 		<lookat xyz="0.0 0.0 0.5" />
 	</camera>

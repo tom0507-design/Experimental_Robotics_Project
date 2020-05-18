@@ -23,8 +23,8 @@ using namespace Eigen;
 const string world_file = "./resources/world_mmp_panda.urdf";
 const string robot_file = "./resources/mmp_panda.urdf";
 const string robot_name = "mmp_panda";
-const string obj_file = "./resources/cup.urdf";
-const string obj_name = "cup"; 
+const string obj_file = "./resources/Yellow_Box.urdf";
+const string obj_name = "Yellow_Box"; 
 const string camera_name = "camera_fixed";
 
 // redis keys:
@@ -153,6 +153,11 @@ int main() {
 	// cache variables
 	double last_cursorx, last_cursory;
 
+	// redis_client.setEigenMatrixJSON(JOINT_ANGLES_KEY, robot->_q); 
+	// redis_client.setEigenMatrixJSON(JOINT_VELOCITIES_KEY, robot->_dq); 
+	// redis_client.setEigenMatrixJSON(OBJ_JOINT_ANGLES_KEY, object->_q); 
+	// redis_client.setEigenMatrixJSON(OBJ_JOINT_VELOCITIES_KEY, object->_dq); 
+
 	// initialize glew
 	glewInitialize();
 
@@ -166,6 +171,7 @@ int main() {
 		int width, height;
 		glfwGetFramebufferSize(window, &width, &height);
 		graphics->updateGraphics(robot_name, robot);
+		graphics->updateGraphics(obj_name, object);
 		graphics->render(camera_name, width, height);
 
 		// swap buffers
