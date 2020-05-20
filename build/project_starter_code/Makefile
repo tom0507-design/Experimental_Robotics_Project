@@ -126,6 +126,21 @@ controller_project/fast:
 .PHONY : controller_project/fast
 
 # Convenience name for target.
+project_starter_code/CMakeFiles/Two_Arms_project_sim.dir/rule:
+	cd /home/myubuntu/sai2/apps/CS225A_Project/build && $(MAKE) -f CMakeFiles/Makefile2 project_starter_code/CMakeFiles/Two_Arms_project_sim.dir/rule
+.PHONY : project_starter_code/CMakeFiles/Two_Arms_project_sim.dir/rule
+
+# Convenience name for target.
+Two_Arms_project_sim: project_starter_code/CMakeFiles/Two_Arms_project_sim.dir/rule
+
+.PHONY : Two_Arms_project_sim
+
+# fast build rule for target.
+Two_Arms_project_sim/fast:
+	cd /home/myubuntu/sai2/apps/CS225A_Project/build && $(MAKE) -f project_starter_code/CMakeFiles/Two_Arms_project_sim.dir/build.make project_starter_code/CMakeFiles/Two_Arms_project_sim.dir/build
+.PHONY : Two_Arms_project_sim/fast
+
+# Convenience name for target.
 project_starter_code/CMakeFiles/simviz_project.dir/rule:
 	cd /home/myubuntu/sai2/apps/CS225A_Project/build && $(MAKE) -f CMakeFiles/Makefile2 project_starter_code/CMakeFiles/simviz_project.dir/rule
 .PHONY : project_starter_code/CMakeFiles/simviz_project.dir/rule
@@ -139,6 +154,33 @@ simviz_project: project_starter_code/CMakeFiles/simviz_project.dir/rule
 simviz_project/fast:
 	cd /home/myubuntu/sai2/apps/CS225A_Project/build && $(MAKE) -f project_starter_code/CMakeFiles/simviz_project.dir/build.make project_starter_code/CMakeFiles/simviz_project.dir/build
 .PHONY : simviz_project/fast
+
+Two_Arms_sim.o: Two_Arms_sim.cpp.o
+
+.PHONY : Two_Arms_sim.o
+
+# target to build an object file
+Two_Arms_sim.cpp.o:
+	cd /home/myubuntu/sai2/apps/CS225A_Project/build && $(MAKE) -f project_starter_code/CMakeFiles/Two_Arms_project_sim.dir/build.make project_starter_code/CMakeFiles/Two_Arms_project_sim.dir/Two_Arms_sim.cpp.o
+.PHONY : Two_Arms_sim.cpp.o
+
+Two_Arms_sim.i: Two_Arms_sim.cpp.i
+
+.PHONY : Two_Arms_sim.i
+
+# target to preprocess a source file
+Two_Arms_sim.cpp.i:
+	cd /home/myubuntu/sai2/apps/CS225A_Project/build && $(MAKE) -f project_starter_code/CMakeFiles/Two_Arms_project_sim.dir/build.make project_starter_code/CMakeFiles/Two_Arms_project_sim.dir/Two_Arms_sim.cpp.i
+.PHONY : Two_Arms_sim.cpp.i
+
+Two_Arms_sim.s: Two_Arms_sim.cpp.s
+
+.PHONY : Two_Arms_sim.s
+
+# target to generate assembly for a file
+Two_Arms_sim.cpp.s:
+	cd /home/myubuntu/sai2/apps/CS225A_Project/build && $(MAKE) -f project_starter_code/CMakeFiles/Two_Arms_project_sim.dir/build.make project_starter_code/CMakeFiles/Two_Arms_project_sim.dir/Two_Arms_sim.cpp.s
+.PHONY : Two_Arms_sim.cpp.s
 
 controller.o: controller.cpp.o
 
@@ -203,7 +245,11 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... controller_project"
+	@echo "... Two_Arms_project_sim"
 	@echo "... simviz_project"
+	@echo "... Two_Arms_sim.o"
+	@echo "... Two_Arms_sim.i"
+	@echo "... Two_Arms_sim.s"
 	@echo "... controller.o"
 	@echo "... controller.i"
 	@echo "... controller.s"

@@ -73,5 +73,6 @@ set(CMAKE_MAKEFILE_PRODUCTS
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
   "project_starter_code/CMakeFiles/controller_project.dir/DependInfo.cmake"
+  "project_starter_code/CMakeFiles/Two_Arms_project_sim.dir/DependInfo.cmake"
   "project_starter_code/CMakeFiles/simviz_project.dir/DependInfo.cmake"
   )

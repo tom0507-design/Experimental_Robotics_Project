@@ -23,6 +23,9 @@ const string robot_file = "./resources/mmp_panda.urdf";
 #define JOINT_CONTROLLER      0
 #define POSORI_CONTROLLER     1
 
+
+#define RAD(deg) ((double)(deg) * M_PI / 180.0)
+
 //int state = JOINT_CONTROLLER;
 int state = POSORI_CONTROLLER;
 
@@ -82,12 +85,12 @@ int main() {
 #else
 	posori_task->_use_velocity_saturation_flag = true;
 #endif
-	
+	posori_task->_linear_saturation_velocity = 0.1 ;
 	VectorXd posori_task_torques = VectorXd::Zero(dof);
-	posori_task->_kp_pos = 200.0;
-	posori_task->_kv_pos = 20.0;
-	posori_task->_kp_ori = 200.0;
-	posori_task->_kv_ori = 20.0;
+	posori_task->_kp_pos = 200; //200.0;
+	posori_task->_kv_pos = 25.0;
+	posori_task->_kp_ori = 100.0;
+	posori_task->_kv_ori = 25.0;
 
 	// joint task
 	auto joint_task = new Sai2Primitives::JointTask(robot);
@@ -103,7 +106,7 @@ int main() {
 	joint_task->_kv = 15.0;
 
 	VectorXd q_init_desired = initial_q;
-	q_init_desired << 0.0, 0.0, 0.0, -30.0, -15.0, -15.0, -105.0, 0.0, 90.0, 45.0;
+	q_init_desired << 0.0, -0.0, 0.0, -30.0, -15.0, -15.0, -105.0, 0.0, 90.0, 45.0;
 	q_init_desired *= M_PI/180.0;
 	joint_task->_desired_position = q_init_desired;
 
@@ -153,39 +156,91 @@ int main() {
 
 		else if(state == POSORI_CONTROLLER)
 		{
+			
 			// update task model and set hierarchy
 			N_prec.setIdentity();
 			posori_task->updateTaskModel(N_prec);
 			N_prec = posori_task->_N;
 			joint_task->updateTaskModel(N_prec);
 
-			//Set Desired Position
-			Vector3d des_pos_in_world = Vector3d(0.0, -1, 0.6); // To the Box
-			//Vector3d des_pos_in_world = Vector3d(-0.3, 0.8, 0.6); // To the cup
+			Vector3d des_pos_in_world = Vector3d(0.0, -0.9, 0.6); // To the Box
 			posori_task->_desired_position = des_pos_in_world ;
-			//
-			VectorXd q_desired = VectorXd::Zero(10);
-			q_desired << 0.0, -0.5, 0.0, -30.0*M_PI/180.0, -15.0*M_PI/180.0, -15.0*M_PI/180.0, -105.0*M_PI/180.0, 0.0*M_PI/180.0, 90.0*M_PI/180.0, 45.0*M_PI/180.0;
 
+			VectorXd q_high(dof), q_low(dof);
+			q_low << robot->_q(0), robot->_q(1), robot->_q(2) , RAD(-165), RAD(-100), RAD(-165), RAD(-170), RAD(-165), RAD(0), RAD(-165);
+			q_high << robot->_q(0), robot->_q(1), robot->_q(2), RAD(165), RAD(100), RAD(165), RAD(-30), RAD(165), RAD(210), RAD(165);
+
+			Vector3d x , x_vel , p ;
+			VectorXd g = VectorXd::Zero(dof);
 			MatrixXd Jv = MatrixXd::Zero(3,dof);
 			MatrixXd Lambda = MatrixXd::Zero(3,3);
 			MatrixXd J_bar = MatrixXd::Zero(dof,3);
 			MatrixXd N = MatrixXd::Zero(dof,dof);
 
+			robot->position(x, control_link, control_point);
+			robot->linearVelocity(x_vel, control_link, control_point);
+			robot->gravityVector(g);
 			robot->Jv(Jv, control_link, control_point);
 			robot->taskInertiaMatrix(Lambda, Jv);
 			robot->dynConsistentInverseJacobian(J_bar, Jv);
 			robot->nullspaceMatrix(N, Jv);
 
+			double kdamp = 7;
+			double kmid = 25;
+			VectorXd Gamma_damp(dof), Gamma_mid(dof);
+			Gamma_mid = - (kmid * (2 * robot->_q - (q_high + q_low)));
+			Gamma_damp = - (kdamp * robot->_dq);
+
 			// compute torques
 			posori_task->computeTorques(posori_task_torques);
 			joint_task->computeTorques(joint_task_torques);
 
-			command_torques = posori_task_torques + joint_task_torques + N.transpose()*(-50*(robot->_q - q_desired) - 10* robot->_dq);
+			
+			//command_torques = posori_task_torques + joint_task_torques;
+			command_torques = posori_task_torques + N.transpose() * Gamma_damp + N.transpose() * Gamma_mid; ; 
 
-			Vector3d ee_pos ;
-			robot->position(ee_pos, control_link, control_point);
-			cout << "current XYZ : " << '\n' << ee_pos << endl;
+
+			// // update task model and set hierarchy
+			// N_prec.setIdentity();
+			// posori_task->updateTaskModel(N_prec);
+			// N_prec = posori_task->_N;
+			// joint_task->updateTaskModel(N_prec);
+
+			// //Set Desired Position
+			// Vector3d des_pos_in_world = Vector3d(0.0, -0.85, 0.6); // To the Box
+			// //Vector3d des_pos_in_world = Vector3d(-0.3, 0.8, 0.6); // To the cup
+			// posori_task->_desired_position = des_pos_in_world ;
+			// //
+			// VectorXd q_desired = VectorXd::Zero(10);
+			// q_desired << robot->_q;
+
+			// joint_task->_desired_position = q_desired ;
+
+			// Vector3d x , x_vel , p ;
+			// VectorXd g = VectorXd::Zero(dof);
+			// MatrixXd Jv = MatrixXd::Zero(3,dof);
+			// MatrixXd Lambda = MatrixXd::Zero(3,3);
+			// MatrixXd J_bar = MatrixXd::Zero(dof,3);
+			// MatrixXd N = MatrixXd::Zero(dof,dof);
+
+			// robot->position(x, control_link, control_point);
+			// robot->linearVelocity(x_vel, control_link, control_point);
+			// robot->gravityVector(g);
+			// robot->Jv(Jv, control_link, control_point);
+			// robot->taskInertiaMatrix(Lambda, Jv);
+			// robot->dynConsistentInverseJacobian(J_bar, Jv);
+			// robot->nullspaceMatrix(N, Jv);
+
+			// // compute torques
+			// posori_task->computeTorques(posori_task_torques);
+			// joint_task->computeTorques(joint_task_torques);
+
+			// command_torques = posori_task_torques +  joint_task_torques ;
+			// //command_torques = Jv.transpose()*( Lambda*(-50*(x - des_pos_in_world) - 5* x_vel) + J_bar.transpose()*g ) + N.transpose()*( robot->_M * (-25*(robot->_q - q_desired) - 10* robot->_dq) );
+
+			// Vector3d ee_pos ;
+			// robot->position(ee_pos, control_link, control_point);
+			// cout << "current XYZ : " << '\n' << ee_pos << endl;
 
 		}
 

@@ -3,4 +3,5 @@
 /home/myubuntu/sai2/apps/CS225A_Project/build/project_starter_code/CMakeFiles/rebuild_cache.dir
 /home/myubuntu/sai2/apps/CS225A_Project/build/project_starter_code/CMakeFiles/edit_cache.dir
 /home/myubuntu/sai2/apps/CS225A_Project/build/project_starter_code/CMakeFiles/controller_project.dir
+/home/myubuntu/sai2/apps/CS225A_Project/build/project_starter_code/CMakeFiles/Two_Arms_project_sim.dir
 /home/myubuntu/sai2/apps/CS225A_Project/build/project_starter_code/CMakeFiles/simviz_project.dir

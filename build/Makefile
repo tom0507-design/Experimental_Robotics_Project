@@ -124,6 +124,19 @@ controller_project/fast:
 .PHONY : controller_project/fast
 
 #=============================================================================
+# Target rules for targets named Two_Arms_project_sim
+
+# Build rule for target.
+Two_Arms_project_sim: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 Two_Arms_project_sim
+.PHONY : Two_Arms_project_sim
+
+# fast build rule for target.
+Two_Arms_project_sim/fast:
+	$(MAKE) -f project_starter_code/CMakeFiles/Two_Arms_project_sim.dir/build.make project_starter_code/CMakeFiles/Two_Arms_project_sim.dir/build
+.PHONY : Two_Arms_project_sim/fast
+
+#=============================================================================
 # Target rules for targets named simviz_project
 
 # Build rule for target.
@@ -145,6 +158,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... controller_project"
+	@echo "... Two_Arms_project_sim"
 	@echo "... simviz_project"
 .PHONY : help
 
